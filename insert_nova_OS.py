@@ -35,7 +35,7 @@ try:
         charset=config("charset_f")
     )
     print("Database Local Firebird connection made!")
-    # Servicos
+    # Servicos local
     cursor_fire = con_fire.cursor()
     cursor_fire.execute("""SELECT REFERENCIAL, REF_FUN, DESCRICAO,
                            RESPONSAVEL, DT_AGENDA, DT_PAGAMENTO, VALOR,
@@ -55,32 +55,54 @@ try:
     # Precisa ter pelo menos dois campos para passar para string
     t_mysql_fun = cursor_mysql.fetchall()
 
+    for rfu, nome, u_fun_id in t_mysql_fun:
+        print(f'{u_fun_id} - {nome}')
+
     list_rfire = []
     for rfire, rfun, desc, respo, dt_a, dt_p,  vl, eq in t_ser:
-        if rfun == 1 or rfun == 2 or rfun == 5 or rfun == 19 or rfun == 22:
-            # print(rfire, desc)
+        if rfun == 1 or rfun == 2 or rfun == 5 or rfun == 10 or rfun == 22:
             list_rfire.append(rfire)
 
     list_rfos = []
     for rfos, rfun_os, descri, dt, vl_os, user_id in t_os:
+        # print(rfun_os, user_id)
         list_rfos.append(rfos)
 
-    new_list = []
+    dif_list = []
     for element in list_rfire:
         if element not in list_rfos:
-            new_list.append(element)
-    print('''Lista de referenciais diferentes dos bancos
-            (falta inserir no site): \n''', new_list)
+            dif_list.append(element)
 
-    print(f'Último referencial serviços local: {new_list[-1]}')
+    print(f'Lista de referenciais diferentes dos bancos'
+          f'(falta inserir no site): {dif_list}\n')
     # list_rfos[-2] -1 nula...
-    print(f'Último referencial serviços (OS) site: {list_rfos[-1]}')
+    print(f'Referenciais serviços (OS) site: {list_rfos}\n')
+
+    # s = ['a', 'b', 'c']
+    # f = ['a', 'b', 'c', 'd']
+    # ss = set(s)
+    # fs = set(f)
+    # print(s)
+    # print(f)
+    # print('Interseção: ', ss.intersection(fs))
+    # print('União: ', ss.union(fs))
+    # print('Diferença (União-Interseção): ', ss.union(fs)-ss.intersection(fs))
 
     # comparar e fazer insert dos referenciais diferentes...
     dt_ = datetime.now().strftime('%Y-%m-%d %H:%M')
     for rfire, rfun, desc, respo, dt_a, dt_p, vl, eq in t_ser:
-        for rfos, rfun_os, descri, dt, vl_os, user_id in t_os:
-            if rfire == new_list[-1] and rfun == rfun_os:
+        if rfun == 1:
+            user_id = 2  # maurilio
+        if rfun == 2:
+            user_id = 3  # fernando
+        if rfun == 5:
+            user_id = 4  # flavia
+        if rfun == 10:
+            user_id = 5  # rogerio
+        if rfun == 22:
+            user_id = 7  # julia
+        if len(dif_list) != 0:
+            if rfire == dif_list[-1]:  # depois da primeiro
                 if desc is None:
                     desc = "Sem descrição."
                 desc = re.sub(r"^\s+|\s+$", "", desc)
@@ -108,7 +130,6 @@ try:
                     )
                 cursor_mysql.executemany(sql_i, (val,))
                 con_mysql.commit()
-                break
 
     con_mysql.close()
     con_fire.close()
