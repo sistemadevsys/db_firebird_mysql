@@ -7,19 +7,22 @@ from decouple import config
 import mysql.connector
 import re
 from datetime import datetime
+import os
 
 
 try:
     # Mysql Local
-    # con_mysql = mysql.connector.connect(
-    #     host=config("host"), user=config("user"),
-    #     password=config("password"),
-    #     database=config("database"))
-    # MYSQL
     con_mysql = mysql.connector.connect(
-        host=config("host_"), user=config("user_"),
-        password=config("password_"),
-        database=config("database_"))
+        host=config("host"),
+        user=config("user"),
+        password=config("password"),
+        database=config("database"))
+    # MYSQL Site
+    # con_mysql = mysql.connector.connect(
+    #     host=config("host_"),
+    #     user=config("user_"),
+    #     password=config("password_"),
+    #     database=config("database_"))
 
     print("Database connection Mysql made!")
 
@@ -93,12 +96,26 @@ try:
     dt_ = datetime.now().strftime('%Y-%m-%d %H:%M')
     i = 0
     for rfire, rfun, desc, respo, dt_a, dt_p, vl, eq in t_ser:
+        # Users db local devsys
+        # 2 - MAURILIO
+        # 3 - FERNANDO
+        # 4 - FLAVIA
+        # 5 - ROGERIO
+        # 6 - Cesar Augusto
+        # 7 - Julia
+
+        # Users db site devsys
+        # 4 - MAURILIO
+        # 3 - FERNANDO
+        # 5 - FLAVIA
+        # 6 - ROGERIO
+        # 7 - Julia
         if rfun == 1:
-            user_id = 4  # maurilio
+            user_id = 2  # maurilio
         if rfun == 2:
             user_id = 3  # fernando
         if rfun == 5:
-            user_id = 5  # flavia
+            user_id = 4  # flavia
         if rfun == 10:
             user_id = 6  # rogerio
         if rfun == 22:
@@ -137,9 +154,12 @@ try:
 
     con_mysql.close()
     con_fire.close()
+    # fecha terminal?
+    # os._exit(1)
 
 except ValueError:
     print('Error database')
 else:
     con_mysql.close()
     con_fire.close()
+    os._exit(1)
