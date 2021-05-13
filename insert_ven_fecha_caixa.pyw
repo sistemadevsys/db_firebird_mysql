@@ -66,7 +66,6 @@ try:
 
     list_rfire = []
     for rfire, rfs, dtf, rfc, rff, vl, dbt,  comp, rfb, dsc in t_fc:
-        # if rfun == 1 or rfun == 2 or rfun == 5 or rfun == 10 or rfun == 22:
         list_rfire.append(rfire)
 
     list_rfms = []
