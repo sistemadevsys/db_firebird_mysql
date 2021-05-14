@@ -11,17 +11,17 @@ import os
 
 try:
     # Mysql Local
-    con_mysql = mysql.connector.connect(
-        host=config("host"),
-        user=config("user"),
-        password=config("password"),
-        database=config("database"))
-    # MYSQL Site
     # con_mysql = mysql.connector.connect(
-    #     host=config("host_"),
-    #     user=config("user_"),
-    #     password=config("password_"),
-    #     database=config("database_"))
+    #     host=config("host"),
+    #     user=config("user"),
+    #     password=config("password"),
+    #     database=config("database"))
+    # MYSQL Site
+    con_mysql = mysql.connector.connect(
+        host=config("host_"),
+        user=config("user_"),
+        password=config("password_"),
+        database=config("database_"))
 
     print("Database connection Mysql made!")
 
