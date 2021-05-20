@@ -42,8 +42,8 @@ try:
     t_ser = cursor_fire.fetchall()
 
     # Ordem Servicos
-    cursor_mysql.execute("""SELECT referencial, ref_fun2
-                    FROM core_ordem_servico
+    cursor_mysql.execute("""SELECT referencial, nome
+                    FROM core_ven_formas
                     """)
     t_os = cursor_mysql.fetchall()
 
@@ -56,7 +56,7 @@ try:
     for ref, rfun in t_os:
         # delete (não usar porque é backup)
         if ref:
-            sql_Delete_query = """DELETE from core_ordem_servico
+            sql_Delete_query = """DELETE from core_ven_formas
                                     WHERE referencial = %s"""
             cursor_mysql.execute(sql_Delete_query, (ref,))
             con_mysql.commit()

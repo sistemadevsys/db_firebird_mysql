@@ -49,7 +49,7 @@ try:
                         ref_receber, ref_fun, ref_cheque, hora, ref_pagamento,
                         ref_transf_caixa, ref_setor, ref_locacao, ref_pag,
                         ref_mesa, ref_garcom, ref_empresa
-                        FROM VEN_FECHA_CAIXA""")
+    FROM VEN_FECHA_CAIXA""")
     t_fc = cursor_fire.fetchall()
 
     # Ven_Fecha_Caixa site
@@ -66,83 +66,9 @@ try:
                         FROM core_ven_fecha_caixa
                         """)
     t_fcs = cursor_mysql.fetchall()
+    # Precisa ter pelo menos dois campos para passar para string
 
-    list_rfire = []
-    for (rf, rs, dt, rfm, vl, c, rc, db, s, re, ch, nd, rse, rb, rco,
-         rsco, arq, cfc, rfp, vlse, vlpe, dsc, dtc, recl, tc, lc, rs2, rs3,
-         cms, vlcms, rfcb, refn, rfch, hr, refpa, rtsf, rfst, rlcc, rpg,
-         rfma, rfga, rfem) in t_fc:
-        list_rfire.append(rf)
-
-    list_rfms = []
-    for (refs, rs, dt, rfm, vl, c, rc, db, s, re, ch, nd, rse, rb, rco,
-         rsco, arq, cfc, rfp, vlse, vlpe, dsc, dtc, recl, tc, lc, rs2, rs3,
-         cms, vlcms, rfcb, refn, rfch, hr, refpa, rtsf, rfst, rlcc, rpg,
-         rfma, rfga, rfem) in t_fcs:
-        # print()
-        list_rfms.append(refs)
-
-    dif_list = []
-    for element in list_rfire:
-        if element not in list_rfms:
-            dif_list.append(element)
-
-    print(f'Lista de referenciais diferentes dos bancos'
-          f'(ven_fecha_caixa - falta inserir no site): {dif_list}\n')
-    # list_rfos[-2] -1 nula...
-    # print(f'Referenciais fecha caixa site: {list_rfms}\n')
-
-    # s = ['a', 'b', 'c']
-    # f = ['a', 'b', 'c', 'd']
-    # ss = set(s)
-    # fs = set(f)
-    # print(s)
-    # print(f)
-    # print('Interseção: ', ss.intersection(fs))
-    # print('União: ', ss.union(fs))
-    # print('Diferença (União-Interseção): ', ss.union(fs)-ss.intersection(fs))
-
-    # comparar e fazer insert dos referenciais diferentes...
-
-    i = 0
-    for (rfl, rs, dt, rfm, vl, c, rc, db, s, re, ch, nd, rse, rb, rco, rsco,
-         arq, cfc, rfp, vlse, vlpe, dsc, dtc, recl, tc, lc, rs2, rs3, cms,
-         vlcms, rfcb, refn, rfch, hr, refpa, rtsf, rfst, rlcc, rpg, rfma,
-         rfga, rfem) in t_fc:
-        if len(dif_list) != 0:
-            if rfl == dif_list[i]:
-                # if dtf is None:
-                #     dtf = " "
-                # dtf = re.sub(r"^\s+|\s+$", "", dtf)
-                sql_i = """INSERT INTO core_ven_fecha_caixa(
-                        referencial, ref_saida, data, ref_forma,
-                        valor, complemento, ref_caixa, debito, saldo,
-                        ref_entrada, cheque, n_documento, ref_servicos,
-                        ref_banco, ref_conta, ref_subconta, arquivo_morto,
-                        codigo_fiscal, ref_pagar, val_servicos, val_peca,
-                        desconto, data_compensado, ref_cliente, troco, local,
-                        ref_subconta2, ref_subconta3, comissao, vl_comissao,
-                        ref_receber, ref_fun, ref_cheque, hora, ref_pagamento,
-                        ref_transf_caixa, ref_setor, ref_locacao, ref_pag,
-                        ref_mesa, ref_garcom, ref_empresa)
-                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                           %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                           %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                           %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                           %s, %s)"""
-                val = (
-                    rfl, rs, dt, rfm, vl, c, rc, db, s, re,
-                    ch, nd, rse, rb, rco, rsco, arq, cfc, rfp, vlse,
-                    vlpe, dsc, dtc, recl, tc, lc, rs2, rs3, cms, vlcms,
-                    rfcb, refn, rfch, hr, refpa, rtsf, rfst, rlcc, rpg, rfma,
-                    rfga, rfem
-                    )
-                cursor_mysql.executemany(sql_i, (val,))
-                con_mysql.commit()
-                print('Inserido referencial: ', dif_list[i])
-                i += 1
-
-    # Comparar e Fazer UPDATE (Após o Insert)
+    # Comparar e Fazer UPDATE (Após o Insert) - erro sempre Atualizando
     for (rfl, rs, dt, rfm, vl, c, rc, db, s, re, ch, nd, rse, rb, rco, rsco,
          arq, cfc, rfp, vlse, vlpe, dsc, dtc, recl, tc, lc, rs2, rs3, cms,
          vlcms, rfcb, refn, rfch, hr, refpa, rtsf, rfst, rlcc, rpg, rfma,

@@ -67,29 +67,7 @@ try:
     # list_rfos[-2] -1 nula...
     print(f'Referenciais caixa site: {list_rfms}\n')
 
-    i = 0
-    for rfire, dt, tc, rff, fc, hrf, nc, sf in t_c:
-
-        if len(dif_list) != 0:
-            if rfire == dif_list[i]:
-                # if dtf is None:
-                #     dtf = " "
-                # dtf = re.sub(r"^\s+|\s+$", "", dtf)
-
-                sql_i = """INSERT INTO core_ven_caixa(
-                    referencial, data, troco,
-                    ref_fun, fechado, hora_fechamento,
-                    nome_caixa, saldo_final)
-                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"""
-                val = (
-                    rfire, dt, tc, rff, fc, hrf, nc, sf
-                    )
-                cursor_mysql.executemany(sql_i, (val,))
-                con_mysql.commit()
-                print('Inserido referencial: ', dif_list[i])
-                i += 1
-
-    # Comparar e Fazer UPDATE - Após insert
+    # Comparar e Fazer UPDATE
     for rfire, dt, tc, rff, fc, hrf, nc, sf in t_c:
         for rfms, dts, tcs, rffs, fcs, hrfs, ncs, sfs in t_cs:
             if rfire == rfms:
@@ -151,7 +129,7 @@ try:
                     value_column = 'saldo_final'
                     referencial = 'referencial'
                     comando_sql = f"""UPDATE core_ven_caixa
-                                    SET {value_column}=({sf})
+                                    SET {value_column}=('{sf}')
                                     WHERE {referencial}=({rfire})"""
                     print('Atualizando: ', value_column)
                     cursor_mysql.execute(comando_sql)
