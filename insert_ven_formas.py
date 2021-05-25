@@ -100,6 +100,8 @@ try:
                 print('Inserido referencial: ', dif_list[count])
                 count += 1
 
+    # Colocar Update
+
     con_mysql.close()
     con_fire.close()
     # fecha terminal?

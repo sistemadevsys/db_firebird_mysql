@@ -8,17 +8,17 @@ import mysql.connector
 
 try:
     # Mysql Local
-    con_mysql = mysql.connector.connect(
-        host=config("host"),
-        user=config("user"),
-        password=config("password"),
-        database=config("database"))
-    # MYSQL site
     # con_mysql = mysql.connector.connect(
-    #     host=config("host_"),
-    #     user=config("user_"),
-    #     password=config("password_"),
-    #     database=config("database_"))
+    #     host=config("host"),
+    #     user=config("user"),
+    #     password=config("password"),
+    #     database=config("database"))
+    # MYSQL site
+    con_mysql = mysql.connector.connect(
+        host=config("host_"),
+        user=config("user_"),
+        password=config("password_"),
+        database=config("database_"))
 
     print("Database connection Mysql made!")
 
@@ -42,8 +42,8 @@ try:
     t_ser = cursor_fire.fetchall()
 
     # Ordem Servicos
-    cursor_mysql.execute("""SELECT referencial, nome
-                    FROM core_ven_formas
+    cursor_mysql.execute("""SELECT referencial, ref_saida
+                    FROM core_ven_fecha_caixa
                     """)
     t_os = cursor_mysql.fetchall()
 
@@ -56,7 +56,7 @@ try:
     for ref, rfun in t_os:
         # delete (não usar porque é backup)
         if ref:
-            sql_Delete_query = """DELETE from core_ven_formas
+            sql_Delete_query = """DELETE from core_ven_fecha_caixa
                                     WHERE referencial = %s"""
             cursor_mysql.execute(sql_Delete_query, (ref,))
             con_mysql.commit()
