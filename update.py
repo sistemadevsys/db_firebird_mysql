@@ -5,7 +5,7 @@ import firebirdsql
 from decouple import config
 # pip install mysql-connector-python
 import mysql.connector
-# import re
+import re
 import os
 
 
@@ -47,18 +47,31 @@ try:
                             FROM CON_CONFIG""")
     t_ul = cursor_fire.fetchall()
 
-    # colocar "cpf_cnpj" da empresa
-    cpf_cnpj_empresa = "32502663000109"
+    # pegar dados do arquivo
+    arq = open("cod_cliente.ini", "r")
+    lst_cod = []
+    # Efetua a leitura das linhas do arquivo
+    for line in arq.readlines():
+        cpf_cnpj_empresa = str(line)
+        # Quebra a linha lida em uma lista, a cada espaço encontrado
+        # é gerado um item na lista
+        # line.strip().split(' ')
+
+        # retira espaços em branco do inicio e fim
+        cpf_cnpj_empresa = re.sub(r"^\s+|\s+$", "", cpf_cnpj_empresa)
+        lst_cod.append(cpf_cnpj_empresa)
+    cpf_cnpj_empresa = str(lst_cod[0])
 
     # Comparar e Fazer UPDATE - LOCAL data_uso
     for rfire, dtu in t_ul:
         for rfms, cpf_cnpj, dtus in t_us:
-            print(cpf_cnpj)
             # Cliente site - DevSys cpf_cnpj
             if cpf_cnpj == cpf_cnpj_empresa:
+                # print("Site: ", cpf_cnpj)
+                # print("Cod: ", cpf_cnpj_empresa)
                 if dtus != dtu:
-                    print(rfms, " Data Uso Site: ", dtus)
-                    print(rfire, " Data Uso Local: ", dtu)
+                    print(rfms, " Uso Site: ", dtus)
+                    print(rfire, " Uso Local: ", dtu)
                     value_column = 'data_uso'
                     comando_sql = f"""UPDATE CON_CONFIG
                                 SET {value_column}=('{dtus}')
