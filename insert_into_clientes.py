@@ -71,7 +71,7 @@ try:
             if razao is None:
                 razao = 'Sem Razão Social'
             if cpf_cnpj is None:
-                new_cpf_cnpj = '00.000.000.0000/00'
+                new_cpf_cnpj = '0'
             if cpf_cnpj is not None:
                 new_cpf_cnpj = ''.join(e for e in cpf_cnpj if e.isalnum())
                 print(new_cpf_cnpj)
