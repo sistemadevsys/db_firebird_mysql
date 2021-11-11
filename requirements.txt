@@ -6,3 +6,8 @@ requests==2.25.1
 six==1.15.0
 # executavel win de python
 pyinstaller
+# pyqt5
+PyQt5
+pyqt5-tools
+
+reportlab
